@@ -13,6 +13,7 @@
 //	char created_at[50];
 //};
 
+// INi Editan
 struct USER {
 	std::string id;
 	std::string username;
