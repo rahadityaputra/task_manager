@@ -25,6 +25,7 @@
 
 
 
+// INi Editan
 struct USER {
 	std::string id;
 	std::string username;
