@@ -6,8 +6,12 @@
 #include <cstring>
 #include <fstream>
 
-#define MAX_USERNAME_LENGTH 50
-#define MAX_PASSWORD_LENGTH 255
+#define MAX_USERNAME_LENGTH 12
+#define MIN_USERNAME_LENGTH 4
+#define MAX_PASSWORD_LENGTH 16
+#define MIN_PASSWORD_LENGTH 8
+#define MAX_NAME_LENGTH 100
+#define MIN_NAME_LENGTH 1
 
 
 // TODO
@@ -47,6 +51,34 @@ void sayHello(std::string name) {
 	std::cout << "Hello " << name << std::endl;
 }
 
+bool validateData(std::string name, std::string username, std::string password1, std::string password2) {
+	int nameLength = name.length();
+	int usernameLength = username.length();
+	int password1Length = password1.length();
+	int password2Length = password2.length();
+	
+	if (nameLength >= MIN_NAME_LENGTH && nameLength <= MAX_NAME_LENGTH) {
+		if (usernameLength >= MIN_USERNAME_LENGTH && usernameLength <= Max_USERNAME_LENGTH) {
+				if (password1Length >= MIN_PASSWORD_LENGTH && password1Length <= MAX_PASSWORD_LENGTH && password2Length >= MIN_PASSWORD_LENGTH && password2Length <= MAX_PASSWORD_LENGTH  ) {
+					if (password1 == password2) {
+						return true;
+					} else {
+						std::cout << "password tidak sama" << std::endl;
+					}
+				} else {
+					std::cout << "password harus 8 - 16 karakter" << std::endl;
+				}		
+		} else {
+			std::cout << "Username harus 4 sampai 12 karakter" << std::endl;
+		}
+	
+	} else {
+		std::cout << "nama harus 1 - 100 karakter" <<std:: endl;
+	}
+
+	return false;
+}
+
 
 bool checkCache() {
 	std::string isCache;
@@ -59,7 +91,7 @@ bool checkCache() {
 	return false;
 }
 
-void createCache(char username[50], char password[500]) {
+void createCache(std::string username, std::string password) {
 	cacheWrite.open("cache.txt");
 	cacheWrite << "true";
 	cacheWrite << "\n" << username;
@@ -145,12 +177,12 @@ void displayData() {
 }
 
 
-bool addDataUser(const char* name, const char* username, const char* password) {
+bool addDataUser(std::string name, std::string username, std::string password) {
     char query[500];
-    char escaped_username[100], escaped_password[450], escaped_name[500];
-    mysql_real_escape_string(conn, escaped_username, username, strlen(username));
-    mysql_real_escape_string(conn, escaped_password, password, strlen(password));
-	mysql_real_escape_string(conn, escaped_name, name, strlen(name));
+    char escaped_username[100], escaped_password[100], escaped_name[100];
+    mysql_real_escape_string(conn, escaped_username, username.c_str(), username.length());
+    mysql_real_escape_string(conn, escaped_password, password.c_str(), password.length());
+	mysql_real_escape_string(conn, escaped_name, name.c_str(), name.length());
     sprintf(query, "INSERT INTO user VALUES (NULL, '%s', '%s', '%s', current_timestamp())", escaped_username, escaped_password, escaped_name);
     if (mysql_query(conn, query) == 0) {
         std::cout << "Data berhasil ditambahkan!" << std::endl;
@@ -173,9 +205,9 @@ bool  checkLogin(std::string username, std::string password) {
   return false;
 }
 
-void menu(/*char username[50]*/) {
+void menu() {
+	system("cls");
 	std::cout << "ini menu";
-	//sayHello(getNameDataByUsername(username));
 	int choise;
 	std::cout << "selamat datang di menu utama" << std::endl;
 	std::cout << "0. log out" << std::endl;
@@ -188,8 +220,8 @@ void menu(/*char username[50]*/) {
 
 void logIn() {
 	system("cls");
-	char username[50];
-	char password[225];
+	std::string username;
+	std::string password;
 	std::cout << "======= Log In =======" << std::endl;
 	std::cout << "Username : ";
 	std::cin >> username;
@@ -207,10 +239,11 @@ void logIn() {
 }
 
 void signIn() {
-	char name[500];
-	char username[MAX_USERNAME_LENGTH];
-	char password1[MAX_PASSWORD_LENGTH];
-	char password2[225];
+	system("cls");
+	std::string name;
+	std::string username;
+	std::string password1;
+	std::string password2;
 	std::cout << "======= Sign In =======" << std::endl;
 	std::cout << "Name : ";
 	std::cin >> name;
@@ -221,7 +254,7 @@ void signIn() {
 	std::cout << "Password : ";
 	std::cin >> password2;
 
-	if (strcmp(password1, password2) == 0) {
+	if (validateData(name, username, password1, password2)) {
 		if(addDataUser(name, username, password1)) {
 			createCache(username, password1);
 			menu();	
