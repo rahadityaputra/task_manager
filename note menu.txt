@@ -1,0 +1,26 @@
+menu program task manager
+"Selamat [pagi/siang/malam] => (mengikuti jam pada masing masing komputer yang digunakan), "Nama Pengguna yang lengkap""
+
+1. memuat semua daftar judul tugas yang ada sesuai akun masing masing user [Tampilkan Tugas, hanya judul saja] sekalian di sorting dan format namanya semua hurufnya capslock semua tetapi user bebas dalam menginputkan
+
+untuk deskripsi bebas akan diisi user 
+
+
+1.1 pilih tugas mana yang mau di lihat deskripsi nya [nama tugas, tenggat, matkul]
+
+2. Menu Melihat deskripsi tugas [Tambah Tugas]
+3. tambah tugas : 15 5 2024, tambah tugas 
+add task : judul, deskripsi, tenggat tanggal, tenggat waktu
+
+3. Menu Mencari tugas 
+
+akbar dan alma ppt saja
+tambah menu : judul
+pasword : 
+
+
+
+
+selamat datang di menu tambah tugas
+silahkan mmasukan judul tugas anda
+deskripsi : bla bla bla
