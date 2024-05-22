@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 17, 2024 at 09:31 AM
+-- Generation Time: May 22, 2024 at 09:48 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -32,8 +32,18 @@ CREATE TABLE `task` (
   `task_name` varchar(50) NOT NULL,
   `description` varchar(1000) NOT NULL,
   `deadline` date NOT NULL,
-  `created_at` datetime NOT NULL
+  `created_at` datetime NOT NULL,
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `task`
+--
+
+INSERT INTO `task` (`task_id`, `task_name`, `description`, `deadline`, `created_at`, `user_id`) VALUES
+(1, 'Belajar html', 'belajar html dengan youtube wpu', '2024-05-23', '2024-05-21 16:52:31', 19),
+(2, 'pr algo', 'setelah pulang sekolah langsung kerjain', '2024-05-22', '2024-05-21 16:56:20', 19),
+(10, 'beli makan', 'beli makan di dekat masjid', '2024-05-22', '2024-05-21 16:58:43', 20);
 
 -- --------------------------------------------------------
 
@@ -54,21 +64,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `name`, `created_at`) VALUES
-(1, 'rahadiyaputra', 'rahaditya123', 'rahaditya abimanyu putra', '2024-05-10 07:07:40'),
-(2, 'uhui123', 'awokwowk123', '', '2024-05-10 14:08:37'),
-(3, 'AWOK', '1234', '', '0000-00-00 00:00:00'),
-(6, 'budi', '123', '', '2024-05-10 15:22:15'),
-(7, 'a', 'h', '', '2024-05-10 15:30:41'),
-(8, 'rahaditya', 'buku123', '', '2024-05-11 03:07:13'),
-(9, 'df', 'fa', '', '2024-05-11 03:09:41'),
-(10, 'bayu123', 'bayu_123', '', '2024-05-11 03:23:56'),
-(11, 'bimo', 'bimo123', '', '2024-05-11 03:25:15'),
-(13, 'adit', 'adit123', '', '2024-05-11 07:47:18'),
-(14, 'ferdian123', 'ferdi123', 'ferdian', '2024-05-12 14:31:51'),
-(16, 'upil_12', 'a12', 'bambang', '2024-05-12 14:34:28'),
-(17, 'alfon123', 'alfon123', 'alfonsus', '2024-05-15 04:07:44'),
-(18, '1', '1', '1', '2024-05-15 04:14:12'),
-(19, 'abid123', 'abid123', 'abid', '2024-05-15 05:46:04');
+(19, 'abid123', 'abid123', 'abid', '2024-05-15 05:46:04'),
+(20, 'rahadityaputra', 'adit1234', 'Rahaditya Abimanyu ', '2024-05-21 13:59:27'),
+(21, 'alfonsus', 'alfon123', 'Alfonsus Sitanggang', '2024-05-21 14:27:15');
 
 --
 -- Indexes for dumped tables
@@ -78,7 +76,8 @@ INSERT INTO `user` (`id`, `username`, `password`, `name`, `created_at`) VALUES
 -- Indexes for table `task`
 --
 ALTER TABLE `task`
-  ADD PRIMARY KEY (`task_id`);
+  ADD PRIMARY KEY (`task_id`),
+  ADD KEY `fk_user` (`user_id`);
 
 --
 -- Indexes for table `user`
@@ -95,13 +94,23 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `task`
 --
 ALTER TABLE `task`
-  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `task`
+--
+ALTER TABLE `task`
+  ADD CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
