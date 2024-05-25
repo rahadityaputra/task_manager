@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2024 at 09:48 AM
+-- Generation Time: May 25, 2024 at 01:46 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -31,7 +31,7 @@ CREATE TABLE `task` (
   `task_id` int(11) NOT NULL,
   `task_name` varchar(50) NOT NULL,
   `description` varchar(1000) NOT NULL,
-  `deadline` date NOT NULL,
+  `deadline` datetime NOT NULL,
   `created_at` datetime NOT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -41,9 +41,16 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`task_id`, `task_name`, `description`, `deadline`, `created_at`, `user_id`) VALUES
-(1, 'Belajar html', 'belajar html dengan youtube wpu', '2024-05-23', '2024-05-21 16:52:31', 19),
-(2, 'pr algo', 'setelah pulang sekolah langsung kerjain', '2024-05-22', '2024-05-21 16:56:20', 19),
-(10, 'beli makan', 'beli makan di dekat masjid', '2024-05-22', '2024-05-21 16:58:43', 20);
+(1, 'Belajar html', 'belajar html dengan youtube wpu', '2024-05-23 00:00:00', '2024-05-21 16:52:31', 19),
+(2, 'pr algo', 'setelah pulang sekolah langsung kerjain', '2024-05-22 00:00:00', '2024-05-21 16:56:20', 19),
+(10, 'beli makan', 'beli makan di dekat masjid', '2024-05-22 00:00:00', '2024-05-21 16:58:43', 20),
+(12, 'membuat cilor', 'membuat cilor dengan bahan telur dan makaroni yang direbus terlebih dahulu', '0000-00-00 00:00:00', '2024-05-24 15:58:01', 19),
+(13, 'mengerjakan projek alpro', 'memembuat algoritma nya terlebih dahulu ', '2024-05-24 00:00:00', '2024-05-24 16:04:03', 19),
+(14, 'mencuci baju', '', '2024-05-25 00:00:00', '2024-05-25 10:25:30', 19),
+(15, 'membeli buku', '', '2024-05-25 00:00:00', '2024-05-25 16:39:49', 19),
+(16, 'garap proejk', 'wkwkwk', '0000-00-00 00:00:00', '2024-05-25 18:17:42', 19),
+(17, 'ke rumah temen', '', '0000-00-00 00:00:00', '2024-05-25 18:19:00', 20),
+(18, 'presentasi tugas algo', 'jam 12 di ruang patt 3 c', '0000-00-00 00:00:00', '2024-05-25 18:23:11', 20);
 
 -- --------------------------------------------------------
 
@@ -94,7 +101,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `task`
 --
 ALTER TABLE `task`
-  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `user`
