@@ -40,7 +40,9 @@ void getUserData() {
 }
 
 // function untuk mendapatkan semua data task yang dimiliki seorang user
-void getDataTaskByUsername(std::string username) {
+void getDataTaskByUsername(std::string username, std::vector<TASK>& taskData) {
+	// data task data akan dihapus semua dan akan diganti dengan data yang baru
+	taskData.clear();
 	char query[500];
 	char escaped_username[100];
 	mysql_real_escape_string(conn, escaped_username, username.c_str(), username.length());
@@ -71,10 +73,10 @@ bool addTaskData(std::string task_name, std::string description, std::string dea
 	mysql_real_escape_string(conn, escaped_user_id, user_id.c_str(), user_id.length());
 	sprintf(query, "INSERT INTO task VALUES (NULL, '%s', '%s', '%s', current_timestamp(), '%s')", escaped_task_name, escaped_descriptio, escaped_deadlinee, escaped_user_id);
 	if (mysql_query(conn, query) == 0) {
-        std::cout << "Data berhasil ditambahkan!" << std::endl;
+        std::cout << "Task has been successfullt added !" << std::endl;
         return true;
     } else {
-        std::cerr << "Gagal menambahkan data! Error: " << mysql_error(conn) << std::endl;
+        std::cerr << "Failed to add task ! Error :" << mysql_error(conn) << std::endl;
         return false;
     }
 }

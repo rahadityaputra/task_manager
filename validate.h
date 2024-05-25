@@ -1,4 +1,6 @@
 #include <iostream>
+#include "user.h"
+#include <windows.h>
 
 #define MAX_USERNAME_LENGTH 25
 #define MIN_USERNAME_LENGTH 6
@@ -7,6 +9,17 @@
 #define MAX_NAME_LENGTH 100
 #define MIN_NAME_LENGTH 1
 
+// function untuk cek apakah username dan password yang diinputkan saat login ada atau tidak
+bool  checkLogin(std::string username, std::string password) {
+	for (int i = 0; i < userData.size(); i++) {
+		if (username == userData[i].username && password == userData[i].password) {
+			return true;
+		}	
+  }
+  return false;	
+}
+
+// function untuk cek valid atau tidak username yang dimasukkan oleh user
 bool isValidUsername(const std::string& username) {
     if (username.empty()) {
 			std::cout << "Username harus diisi !" << std::endl;
@@ -19,6 +32,7 @@ bool isValidUsername(const std::string& username) {
 		}
 }
 
+// function untuk cek valid atau tidak password yang dimasukkan oleh user
 bool isValidPassword(const std::string& password) {
     bool hasLetter = false;
     bool hasDigit = false;
@@ -34,12 +48,11 @@ bool isValidPassword(const std::string& password) {
             return true;
         } 
     }
-
 		std::cout << "Password harus kombinasi karakter huruf dan angka" << std::endl;
     return hasLetter && hasDigit;
 }
 
-
+// funtion untuk memvalidasi data sign in user
 bool validateData(std::string name, std::string username, std::string password1, std::string password2) {
 	int nameLength = name.length();
 	int usernameLength = username.length();
@@ -68,6 +81,5 @@ bool validateData(std::string name, std::string username, std::string password1,
 	} else {
 		std::cout << "nama harus 1 - 100 karakter" <<std:: endl;
 	}
-
 	return false;
 }

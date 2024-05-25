@@ -11,6 +11,8 @@
 #include "cache.h"
 #include <iomanip>
 #include <sstream>
+#include <windows.h>
+
 
 void sayHello(std::string time);
 std::string getTimeOfDay();
@@ -20,26 +22,30 @@ std::string convertToMySQLDatetime(const std::string& date, const std::string& t
 void addTask(std::string user_id);
 void getCurrentDataUser(const std::string username, USER &curentUser, std::vector<USER> userData);
 void displayData();
-bool checkLogin(std::string username, std::string password);
 void loadTaskData();
 void menu(std::string username);
+void menuOptios();
 void logIn();
 void signIn();
+void logout();
+void searchTasks();
 
 // funcion main
 int main() {
 	getMysqlConnection();
+	getUserData();
+
 	int choise;
 	if (conn) {
 		if(checkCache()) {
 			std::string username = getUsernameDataInCacheFile();
+			getCurrentDataUser(username, curentUser, userData);
 			menu(username);
 		} else {
 			std::cout << "Welcome to Task Manager" << std::endl;
 			std::cout << "1. Log in\n2. Sign in" << std::endl;
-			std::cout << "Choise = " ; 
+			std::cout << "Choose an option : " ; 
 			std::cin >> choise;
-			
 			switch(choise) {
 				case 1:
 					logIn();
@@ -47,17 +53,12 @@ int main() {
 				case 2:
 					signIn();
 					break;
-				case 3:
-					std::cout << "data data" << std::endl;		
 				default:
 					break;
 			}
 		}
-		
-	
-		
 	} else {
-		std::cout << "Koneksi Database Eror" << std::endl;
+		std::cout << "Database Connection Error" << std::endl;
 	}
 	return 0;
 }
@@ -145,9 +146,7 @@ void addTask(std::string user_id) {
     std::string date = getInputWithSpaces("Masukkan tanggal (DD-MM-YYYY): ");
     std::string time = getInputWithSpaces("Masukkan jam (HH:MM): ");
     std::string datetime = convertToMySQLDatetime(date, time);
-
     addTaskData(task_name, description, datetime, user_id);
-    std::cout << "Task berhasil ditambahkan!" << std::endl;
 }
 
 // funtion untuk mendapatkan data lengkap user yang sedang log in
@@ -158,11 +157,14 @@ void getCurrentDataUser(const std::string username, USER &curentUser, std::vecto
 			curentUser.id = userData[i].id;
 			curentUser.username = userData[i].username;
 			curentUser.password = userData[i].password;
+			curentUser.name = userData[i].name;
 			curentUser.created_at = userData[i].created_at;
 		}
 	}
 }
 
+// function untuk menampilkan data user
+// function ini sepertinya tidak akan dipakai di dalam program
 void displayData() {
 	for (int i = 0; i < userData.size(); i++) {
     std::cout << "id " << userData[i].id  << std::endl;
@@ -172,17 +174,7 @@ void displayData() {
   }
 }
 
-// function untuk cek apakah username dan password yang diinputkan saat login ada atau tidak
-bool  checkLogin(std::string username, std::string password) {
-	for (int i = 0; i < userData.size(); i++) {
-		if (username == userData[i].username && password == userData[i].password) {
-			return true;
-		}	
-  }
-  return false;
-}
-
-// function untuk memuat semua data
+// function untuk memuat semua data task dari database ke dalam program
 void loadTaskData() {
    const int numWidth = 5;
     const int nameWidth = 30;
@@ -207,40 +199,60 @@ void loadTaskData() {
 
     // Header tabel
     printSeparator();
-    std::cout << "| " << printCentered("No.", numWidth)
-              << " | " << printCentered("Task Name", nameWidth) << " |" << std::endl;
+    std::cout << "| " << printCentered("No.", numWidth) << " | " << printCentered("Task Name", nameWidth) << " |" << std::endl;
     printSeparator();
 
     // Isi tabel dengan border dan garis pemisah setiap baris
     for (int i = 0; i < taskData.size(); i++) {
         std::string numStr = std::to_string(i + 1);
-        std::cout << "| " << printCentered(numStr, numWidth)
-                  << " | " << printCentered(taskData[i].task_name, nameWidth) << " |" << std::endl;
+        std::cout << "| " << printCentered(numStr, numWidth) << " | " << printCentered(taskData[i].task_name, nameWidth) << " |" << std::endl;
         printSeparator();
     }
 }
 
 // funtion untuk menampilkan menu ke user
 void menu(std::string username) {
-	system("cls");
-	sayHello(getTimeOfDay());
 	int choise;
-	getDataTaskByUsername(username);
-	loadTaskData();
-	std::cout << "2. Add Task" << std::endl;
-	std::cout << "0. log out" << std::endl;
-	std::cout << "choise : ";
-	std::cin >> choise;
-	switch (choise) {
-	case  0: 
-		deleteCache();
-		break;
-	case  2: 
-		addTask("19");
-		break;
-	default :
-		break;
-	}
+		system("cls");
+		sayHello(getTimeOfDay());
+		menuOptios();
+		std::cin >> choise;
+		switch (choise) {
+		case  1: 
+			system("cls");
+			// menu menampilkan semua task
+			getDataTaskByUsername(username, taskData);
+			loadTaskData();
+			break;
+		case  2: 
+			system("cls");
+			// menu menambah task
+			addTask(curentUser.id);
+			break;
+		case  3: 
+			system("cls");
+			// menu mencari task 
+			searchTasks();
+			break;
+		case  4: 
+			// menu logout dari program
+			system("cls");
+			logout();
+			return;
+			break;
+		default :
+			break;
+		}
+		system("pause");
+		menu(username);
+}
+
+void menuOptios() {
+	std::cout << "1. Display All Taks" << std::endl;
+	std::cout << "2. Add New Task" << std::endl;
+	std::cout << "3. Search Task" << std::endl;
+	std::cout << "4. Logout" << std::endl;
+	std::cout << "Choose an option : ";
 }
 
 // function untuk sistem login
@@ -253,15 +265,16 @@ void logIn() {
 	std::cin >> username;
 	std::cout << "Password : ";
 	std::cin >> password; 
-	getUserData();
 	if(checkLogin(username, password)) {
+		std::cout << "Login Successful....." << std::endl;
+		Sleep(2000);
 		getCurrentDataUser(username, curentUser, userData);
-		std::cout << "masuk menu" << std::endl;
 		createCache(username, password);
 		menu(username);
 	} else {
+		std::cout << "Login Failed....." << std::endl;
+		Sleep(2000);
 		logIn();
-		
 	}
 }
 
@@ -290,4 +303,13 @@ void signIn() {
 	} else {
 		signIn();
 	}
+}
+
+// function untuk log out / keluar dari program
+void logout() {
+	deleteCache();
+}
+
+void searchTasks() {
+
 }

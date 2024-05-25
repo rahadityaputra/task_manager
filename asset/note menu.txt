@@ -1,22 +1,6 @@
-1.1 pilih tugas mana yang mau di lihat deskripsi nya [nama tugas, tenggat, matkul]
-
-2. Menu Melihat deskripsi tugas [Tambah Tugas]
-3. tambah tugas : 15 5 2024, tambah tugas 
-add task : judul, deskripsi, tenggat tanggal, tenggat waktu
-
-3. Menu Mencari tugas 
-
-akbar dan alma ppt saja
-tambah menu : judul
-pasword : 
-
-
-
-
-selamat datang di menu tambah tugas
-silahkan mmasukan judul tugas anda
-deskripsi : bla bla bla
-
 1. menyelesaikan fitur tambah tugas, setelah selesai menambahkan user kembali ke menu utama
 2. mengganti tipe data dari table tenggat waktu
 3. membuat fitur lihat detail task 
+
+error
+1. ketika membuka menu , tidak bisa kembali ke menu lagi
