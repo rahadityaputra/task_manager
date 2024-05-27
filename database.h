@@ -24,6 +24,7 @@ void getMysqlConnection() {
 void getUserData() {
 	const char *query = "SELECT * FROM user";
 	if(!(mysql_query(conn,  query))) {
+		userData.clear();
 		result = mysql_use_result(conn);
 		while (row = mysql_fetch_row(result)) {
 			std::string column0 = row[0];

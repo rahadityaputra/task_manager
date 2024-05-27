@@ -6,7 +6,7 @@
 6. fitur lihat tugas
 
 
-6. ketika daftar , ucapan selamat tidak ada
-7. ketika daftar , tidak bisa menambah task
+6. ketika daftar , ucapan selamat tidak ada ------
+7. ketika daftar , tidak bisa menambah task ------
 8. ketika username ada spasi ke skip
-9. 
+9. ketika melihat detail task malah program berhenti

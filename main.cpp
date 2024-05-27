@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <string.h>
 #include <vector>
 #include <cstring>
@@ -35,7 +36,6 @@ void displayTaskDetail();
 int main() {
 	getMysqlConnection();
 	getUserData();
-
 	int choise;
 	if (conn) {
 		if(checkCache()) {
@@ -66,10 +66,26 @@ int main() {
 
 // funtion untuk melihat detail task
 void displayTaskDetail(int number ) {
-	std::cout << "Title :" <<  taskData[number].task_name << std::endl;
-	std::cout << "Description :" << taskData[number].description << std::endl;
-	std::cout << "Deadline  :" << taskData[number].deadline << std::endl;
-	std::cout << "Created at :"<<taskData[number].created_at << std::endl;
+	int index = number - 1;
+	int width = std::max({
+			taskData[index].task_name.size(),
+			taskData[index].description.size(),
+			taskData[index].deadline.size(),
+			taskData[index].created_at.size()
+	}) + 2;
+
+	std::string border(width + 20, '-'); // Tambahkan panjang label
+	std::cout << "+" << border << "+" << std::endl;
+	std::cout << "| Task Detail" << std::setw(width + 7) << " |" << std::endl; // +7 untuk mengimbangi tambahan di label
+	std::cout << "+" << border << "+" << std::endl;
+	std::cout << "| Title       : " << std::setw(width) << std::left << taskData[index].task_name << " |" << std::endl;
+	std::cout << "+" << border << "+" << std::endl;
+	std::cout << "| Description : " << std::setw(width) << std::left << taskData[index].description << " |" << std::endl;
+	std::cout << "+" << border << "+" << std::endl;
+	std::cout << "| Deadline    : " << std::setw(width) << std::left << taskData[index].deadline << " |" << std::endl;
+	std::cout << "+" << border << "+" << std::endl;
+	std::cout << "| Created at  : " << std::setw(width) << std::left << taskData[index].created_at << " |" << std::endl;
+	std::cout << "+" << border << "+" << std::endl;
 }
 
 // function untuk memberikan ucapan kepada user sesuai waktu real time
@@ -327,7 +343,9 @@ std::cout << "Confirmation : ";
 
 	if (validateData(name, username, password1, password2)) {
 		if(addDataUser(capitalizeFIrstLetter(name), username, password1)) {
+			getUserData();
 			createCache(username, password1);
+			getCurrentDataUser(username, curentUser, userData);
 			menu(username);
 		}
 	} else {
