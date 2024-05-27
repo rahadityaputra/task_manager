@@ -297,15 +297,32 @@ void signIn() {
 	std::string username;
 	std::string password1;
 	std::string password2;
-	std::cout << "======= Sign In =======" << std::endl;
-	std::cout << "Name : ";
+std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "|           ======= Sign In =======         |" << std::endl;
+    std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "\n           ======= NAME =======" << std::endl;
+    std::cout << "+-------------------------------------------+" << std::endl;
+    std::cout << "|     Name must have 1 - 100 characters     |" << std::endl;
+    std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "Name         : ";
 	std::cin.ignore();
 	getline(std::cin, name);
-	std::cout << "Username : ";
+	std::cout << "\n         ======= USERNAME =======" << std::endl;
+    std::cout << "+-------------------------------------------+" << std::endl;
+    std::cout << "|    Username must have 4 - 12 characters   |" << std::endl;
+    std::cout << "|    Username must start with a letter      |" << std::endl;
+    std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "Username     : ";
 	std::cin >> username;
-	std::cout << "Password : ";
+	std::cout << "\n         ======= PASSWORD =======" << std::endl;
+    std::cout << "+-------------------------------------------+" << std::endl;
+    std::cout << "|  Password must contain 8 - 16 characters  |" << std::endl;
+    std::cout << "|  Password must consist of a combination   |" << std::endl;
+    std::cout << "|           of leters and numbers           |" << std::endl;
+    std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "Password     : ";
 	std::cin >> password1;
-	std::cout << "Password : ";
+std::cout << "Confirmation : ";
 	std::cin >> password2;
 
 	if (validateData(name, username, password1, password2)) {
