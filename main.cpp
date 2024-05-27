@@ -29,6 +29,7 @@ void logIn();
 void signIn();
 void logout();
 void searchTasks();
+void displayTaskDetail();
 
 // funcion main
 int main() {
@@ -61,6 +62,14 @@ int main() {
 		std::cout << "Database Connection Error" << std::endl;
 	}
 	return 0;
+}
+
+// funtion untuk melihat detail task
+void displayTaskDetail(int number ) {
+	std::cout << "Title :" <<  taskData[number].task_name << std::endl;
+	std::cout << "Description :" << taskData[number].description << std::endl;
+	std::cout << "Deadline  :" << taskData[number].deadline << std::endl;
+	std::cout << "Created at :"<<taskData[number].created_at << std::endl;
 }
 
 // function untuk memberikan ucapan kepada user sesuai waktu real time
@@ -219,10 +228,14 @@ void menu(std::string username) {
 		std::cin >> choise;
 		switch (choise) {
 		case  1: 
+			int numberTask;
 			system("cls");
 			// menu menampilkan semua task
 			getDataTaskByUsername(username, taskData);
 			loadTaskData();
+			std::cout << "See task number = ";
+			std::cin >> numberTask;
+			displayTaskDetail(numberTask);
 			break;
 		case  2: 
 			system("cls");

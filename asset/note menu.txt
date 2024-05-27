@@ -1,6 +1,12 @@
-1. menyelesaikan fitur tambah tugas, setelah selesai menambahkan user kembali ke menu utama
-2. mengganti tipe data dari table tenggat waktu
-3. membuat fitur lihat detail task 
+1. fitur update tugas 
+2. fitur delete tugas
+3. fitur finish tugas
+4. fitur searching nama task
+5. fitur profile 
+6. fitur lihat tugas
 
-error
-1. ketika membuka menu , tidak bisa kembali ke menu lagi
+
+6. ketika daftar , ucapan selamat tidak ada
+7. ketika daftar , tidak bisa menambah task
+8. ketika username ada spasi ke skip
+9. 
