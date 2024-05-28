@@ -1,6 +1,7 @@
 #include <iostream>
 #include "user.h"
 #include <windows.h>
+#include <sstream>
 
 #define MAX_USERNAME_LENGTH 25
 #define MIN_USERNAME_LENGTH 6
@@ -82,4 +83,47 @@ bool validateData(std::string name, std::string username, std::string password1,
 		std::cout << "nama harus 1 - 100 karakter" <<std:: endl;
 	}
 	return false;
+}
+
+// funtion untuk mendapatkan input yang sesuai yang diminta oleh program
+
+
+template<typename T>
+T getValidatedInput(std::string prompt) {
+ T input;
+    while (true) {
+      std::cout << prompt;
+      std::cin >> input;
+        if (std::cin.fail()) {
+            // Kesalahan input: tipe data tidak sesuai
+          std::cin.clear(); // Menghapus flag kesalahan
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Mengabaikan input yang salah
+          std::cout << "Invalid input. Please enter a valid value." <<std::endl;
+        } else {
+            // Input valid
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Mengabaikan sisa input yang tidak diinginkan
+            break;
+        }
+    }
+    return input;
+}
+
+// Fungsi untuk mendapatkan input satu kata yang tervalidasi
+std::string getSingleWordInput(const std::string& prompt) {
+    std::string input;
+    while (true) {
+        std::cout << prompt;
+        std::getline(std::cin, input);
+
+        std::istringstream stream(input);
+        std::string word;
+        stream >> word;
+
+        // Periksa apakah ada lebih dari satu kata
+        if (stream >> input) {
+            std::cout << "Invalid input. Please enter only one word." << std::endl;
+        } else {
+            return word;
+        }
+    }
 }

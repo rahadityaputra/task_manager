@@ -31,6 +31,7 @@ void signIn();
 void logout();
 void searchTasks();
 void displayTaskDetail();
+void getValidatedInput(std::string &variabel, std::string prompt);
 
 // funcion main
 int main() {
@@ -313,33 +314,34 @@ void signIn() {
 	std::string username;
 	std::string password1;
 	std::string password2;
-std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "+-------------------------------------------+" << std::endl;
 	std::cout << "|           ======= Sign In =======         |" << std::endl;
-    std::cout << "+-------------------------------------------+" << std::endl;
+  std::cout << "+-------------------------------------------+" << std::endl;
 	std::cout << "\n           ======= NAME =======" << std::endl;
-    std::cout << "+-------------------------------------------+" << std::endl;
-    std::cout << "|     Name must have 1 - 100 characters     |" << std::endl;
-    std::cout << "+-------------------------------------------+" << std::endl;
+  std::cout << "+-------------------------------------------+" << std::endl;
+  std::cout << "|     Name must have 1 - 100 characters     |" << std::endl;
+  std::cout << "+-------------------------------------------+" << std::endl;
 	std::cout << "Name         : ";
 	std::cin.ignore();
 	getline(std::cin, name);
 	std::cout << "\n         ======= USERNAME =======" << std::endl;
-    std::cout << "+-------------------------------------------+" << std::endl;
-    std::cout << "|    Username must have 4 - 12 characters   |" << std::endl;
-    std::cout << "|    Username must start with a letter      |" << std::endl;
-    std::cout << "+-------------------------------------------+" << std::endl;
-	std::cout << "Username     : ";
-	std::cin >> username;
+	std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "|    Username must have 4 - 12 characters   |" << std::endl;
+	std::cout << "|    Username must start with a letter      |" << std::endl;
+	std::cout << "+-------------------------------------------+" << std::endl;
+	username = getSingleWordInput("Username     : ");
 	std::cout << "\n         ======= PASSWORD =======" << std::endl;
-    std::cout << "+-------------------------------------------+" << std::endl;
-    std::cout << "|  Password must contain 8 - 16 characters  |" << std::endl;
-    std::cout << "|  Password must consist of a combination   |" << std::endl;
-    std::cout << "|           of leters and numbers           |" << std::endl;
-    std::cout << "+-------------------------------------------+" << std::endl;
-	std::cout << "Password     : ";
-	std::cin >> password1;
-std::cout << "Confirmation : ";
-	std::cin >> password2;
+	std::cout << "+-------------------------------------------+" << std::endl;
+	std::cout << "|  Password must contain 8 - 16 characters  |" << std::endl;
+	std::cout << "|  Password must consist of a combination   |" << std::endl;
+	std::cout << "|           of leters and numbers           |" << std::endl;
+	std::cout << "+-------------------------------------------+" << std::endl;
+	// std::cout << "Password     : ";
+	// std::cin >> password1;
+	password1 = getSingleWordInput("Password     : ");
+	// std::cout << "Confirmation : ";
+	// std::cin >> password2;
+	password2 = getSingleWordInput("Confirmation : ");
 
 	if (validateData(name, username, password1, password2)) {
 		if(addDataUser(capitalizeFIrstLetter(name), username, password1)) {
