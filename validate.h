@@ -96,7 +96,7 @@ T getValidatedInput(std::string prompt) {
       std::cin >> input;
         if (std::cin.fail()) {
             // Kesalahan input: tipe data tidak sesuai
-          std::cin.clear(); // Menghapus flag kesalahan
+            std::cin.clear(); // Menghapus flag kesalahan
           std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Mengabaikan input yang salah
           std::cout << "Invalid input. Please enter a valid value." <<std::endl;
         } else {
