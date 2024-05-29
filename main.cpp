@@ -8,12 +8,10 @@
 #include <ctime>
 #include "validate.h"
 #include "database.h"
-#include "user.h"
 #include "cache.h"
 #include <iomanip>
 #include <sstream>
 #include <windows.h>
-
 
 void sayHello(std::string time);
 std::string getTimeOfDay();
@@ -22,32 +20,66 @@ std::string getInputWithSpaces(const std::string& prompt);
 std::string convertToMySQLDatetime(const std::string& date, const std::string& time);
 void addTask(std::string user_id);
 void getCurrentDataUser(const std::string username, USER &curentUser, std::vector<USER> userData);
-void displayData();
-void loadTaskData();
+void seeAllTaskData();
 void menu(std::string username);
 void menuOptios();
 void logIn();
 void signIn();
 void logout();
-void searchTasks();
-void displayTaskDetail();
 void getValidatedInput(std::string &variabel, std::string prompt);
+void showLoginMenu();
+void deletaTasks();
+bool displayAllTasksData();
+void finishTask(int numberTask);
 
 // funcion main
 int main() {
 	getMysqlConnection();
 	getUserData();
-	int choise;
 	if (conn) {
 		if(checkCache()) {
 			std::string username = getUsernameDataInCacheFile();
 			getCurrentDataUser(username, curentUser, userData);
 			menu(username);
 		} else {
-			std::cout << "Welcome to Task Manager" << std::endl;
+			showLoginMenu();
+		}
+	} else {
+		std::cout << "Database Connection Error !" << std::endl;
+	}
+
+	return 0;
+}
+
+// funtion untuk finish task
+void finishTask(int  numberTask) {
+	std::string finish;
+	finish = getSingleWordInput( "Complete the task ? (y/n) : ");
+	if (finish == "y") {
+		deleteTasksData(taskData[numberTask - 1].id);
+	} else if(finish == "n") {
+		return;
+	} else {
+		finishTask(numberTask);
+	}
+}
+
+// funtion menu delete task
+void deleteTasks () {
+	int deleteNumber;
+	if (displayAllTasksData()) {
+		deleteNumber = getValidatedInput<int>("The option number of the task you want to delete :  ");
+		deleteTasksData(taskData[deleteNumber - 1].id);
+	}
+}
+
+// funtion untuk menampilkan menu login dan sign in
+void showLoginMenu() {
+	system("cls");
+	int choise;
+	std::cout << "Welcome to Task Manager" << std::endl;
 			std::cout << "1. Log in\n2. Sign in" << std::endl;
-			std::cout << "Choose an option : " ; 
-			std::cin >> choise;
+			choise = getValidatedInput<int>("Choose an option : ");
 			switch(choise) {
 				case 1:
 					logIn();
@@ -56,38 +88,11 @@ int main() {
 					signIn();
 					break;
 				default:
-					break;
+					showLoginMenu();
 			}
-		}
-	} else {
-		std::cout << "Database Connection Error" << std::endl;
-	}
-	return 0;
 }
 
-// funtion untuk melihat detail task
-void displayTaskDetail(int number ) {
-	int index = number - 1;
-	int width = std::max({
-			taskData[index].task_name.size(),
-			taskData[index].description.size(),
-			taskData[index].deadline.size(),
-			taskData[index].created_at.size()
-	}) + 2;
 
-	std::string border(width + 20, '-'); // Tambahkan panjang label
-	std::cout << "+" << border << "+" << std::endl;
-	std::cout << "| Task Detail" << std::setw(width + 7) << " |" << std::endl; // +7 untuk mengimbangi tambahan di label
-	std::cout << "+" << border << "+" << std::endl;
-	std::cout << "| Title       : " << std::setw(width) << std::left << taskData[index].task_name << " |" << std::endl;
-	std::cout << "+" << border << "+" << std::endl;
-	std::cout << "| Description : " << std::setw(width) << std::left << taskData[index].description << " |" << std::endl;
-	std::cout << "+" << border << "+" << std::endl;
-	std::cout << "| Deadline    : " << std::setw(width) << std::left << taskData[index].deadline << " |" << std::endl;
-	std::cout << "+" << border << "+" << std::endl;
-	std::cout << "| Created at  : " << std::setw(width) << std::left << taskData[index].created_at << " |" << std::endl;
-	std::cout << "+" << border << "+" << std::endl;
-}
 
 // function untuk memberikan ucapan kepada user sesuai waktu real time
 void sayHello(std::string time) {
@@ -191,53 +196,75 @@ void getCurrentDataUser(const std::string username, USER &curentUser, std::vecto
 
 // function untuk menampilkan data user
 // function ini sepertinya tidak akan dipakai di dalam program
-void displayData() {
-	for (int i = 0; i < userData.size(); i++) {
-    std::cout << "id " << userData[i].id  << std::endl;
-    std::cout << "username : " << userData[i].username << std::endl;
-    std::cout << "password : " << userData[i].password << std::endl;
-    std::cout << "create : "<< userData[i].created_at << std::endl;;
-  }
+// void displayData() {
+// 	for (int i = 0; i < userData.size(); i++) {
+//     std::cout << "id " << userData[i].id  << std::endl;
+//     std::cout << "username : " << userData[i].username << std::endl;
+//     std::cout << "password : " << userData[i].password << std::endl;
+//     std::cout << "create : "<< userData[i].created_at << std::endl;;
+//   }
+// }
+
+// function untuk menampilkan data task dalam bentuk tabel
+bool displayAllTasksData() {
+	if (!taskData.size()) {
+		std::cout <<"Your task data is empty !" << std::endl;
+		return false;
+	}
+	
+	int numberTask;
+
+	const int numWidth = 5;
+	const int nameWidth = 30;
+	const int tableWidth = numWidth + nameWidth + 7; // Total lebar tabel termasuk border dan spasi
+
+	// Garis pemisah header dan footer
+	auto printSeparator = [&]() {
+			std::cout << "+";
+			for (int i = 0; i < numWidth + 2; ++i) std::cout << "=";
+			std::cout << "+";
+			for (int i = 0; i < nameWidth + 2; ++i) std::cout << "=";
+			std::cout << "+" << std::endl;
+	};
+
+	// Fungsi untuk mencetak teks rata tengah
+	auto printCentered = [](const std::string& text, int width) {
+			int padding = width - text.length();
+			int paddingLeft = padding / 2;
+			int paddingRight = padding - paddingLeft;
+			return std::string(paddingLeft, ' ') + text + std::string(paddingRight, ' ');
+	};
+
+	// Header tabel
+	printSeparator();
+	std::cout << "| " << printCentered("No.", numWidth) << " | " << printCentered("Task Name", nameWidth) << " |" << std::endl;
+	printSeparator();
+
+	// Isi tabel dengan border dan garis pemisah setiap baris
+	for (int i = 0; i < taskData.size(); i++) {
+			std::string numStr = std::to_string(i + 1);
+			std::cout << "| " << printCentered(numStr, numWidth) << " | " << printCentered(taskData[i].task_name, nameWidth) << " |" << std::endl;
+			printSeparator();
+	}
+
+	return true;
 }
 
 // function untuk memuat semua data task dari database ke dalam program
-void loadTaskData() {
-   const int numWidth = 5;
-    const int nameWidth = 30;
-    const int tableWidth = numWidth + nameWidth + 7; // Total lebar tabel termasuk border dan spasi
-
-    // Garis pemisah header dan footer
-    auto printSeparator = [&]() {
-        std::cout << "+";
-        for (int i = 0; i < numWidth + 2; ++i) std::cout << "=";
-        std::cout << "+";
-        for (int i = 0; i < nameWidth + 2; ++i) std::cout << "=";
-        std::cout << "+" << std::endl;
-    };
-
-    // Fungsi untuk mencetak teks rata tengah
-    auto printCentered = [](const std::string& text, int width) {
-        int padding = width - text.length();
-        int paddingLeft = padding / 2;
-        int paddingRight = padding - paddingLeft;
-        return std::string(paddingLeft, ' ') + text + std::string(paddingRight, ' ');
-    };
-
-    // Header tabel
-    printSeparator();
-    std::cout << "| " << printCentered("No.", numWidth) << " | " << printCentered("Task Name", nameWidth) << " |" << std::endl;
-    printSeparator();
-
-    // Isi tabel dengan border dan garis pemisah setiap baris
-    for (int i = 0; i < taskData.size(); i++) {
-        std::string numStr = std::to_string(i + 1);
-        std::cout << "| " << printCentered(numStr, numWidth) << " | " << printCentered(taskData[i].task_name, nameWidth) << " |" << std::endl;
-        printSeparator();
-    }
+void seeAllTaskData() {
+	int numberTask;
+	if (displayAllTasksData()) {
+			// untuk melihat task lebih detail
+		std::cout << "See task number = ";
+		std::cin >> numberTask;
+		displayTaskDetail(numberTask);	
+		finishTask(numberTask);	
+	}
 }
 
 // funtion untuk menampilkan menu ke user
 void menu(std::string username) {
+	std::string searchWord;
 	int choise;
 		system("cls");
 		sayHello(getTimeOfDay());
@@ -245,14 +272,10 @@ void menu(std::string username) {
 		std::cin >> choise;
 		switch (choise) {
 		case  1: 
-			int numberTask;
 			system("cls");
 			// menu menampilkan semua task
 			getDataTaskByUsername(username, taskData);
-			loadTaskData();
-			std::cout << "See task number = ";
-			std::cin >> numberTask;
-			displayTaskDetail(numberTask);
+			seeAllTaskData();
 			break;
 		case  2: 
 			system("cls");
@@ -260,11 +283,17 @@ void menu(std::string username) {
 			addTask(curentUser.id);
 			break;
 		case  3: 
-			system("cls");
 			// menu mencari task 
-			searchTasks();
+			system("cls");
+			searchWord = getInputWithSpaces("Please enter a keyword to search for the task name : ");
+			searchTasks(searchWord, taskData);
 			break;
-		case  4: 
+		case 4: 
+			// menu menghapus task 
+			system("cls");
+			deleteTasks();
+			break;
+		case  5: 
 			// menu logout dari program
 			system("cls");
 			logout();
@@ -281,7 +310,8 @@ void menuOptios() {
 	std::cout << "1. Display All Taks" << std::endl;
 	std::cout << "2. Add New Task" << std::endl;
 	std::cout << "3. Search Task" << std::endl;
-	std::cout << "4. Logout" << std::endl;
+	std::cout << "4. Delete Task" << std::endl;
+	std::cout << "5. Logout" << std::endl;
 	std::cout << "Choose an option : ";
 }
 
@@ -291,10 +321,8 @@ void logIn() {
 	std::string username;
 	std::string password;
 	std::cout << "======= Log In =======" << std::endl;
-	std::cout << "Username : ";
-	std::cin >> username;
-	std::cout << "Password : ";
-	std::cin >> password; 
+	username = getSingleWordInput("Username     : ");
+	password = getSingleWordInput("Password     : ");
 	if(checkLogin(username, password)) {
 		std::cout << "Login Successful....." << std::endl;
 		Sleep(2000);
@@ -358,8 +386,4 @@ void signIn() {
 // function untuk log out / keluar dari program
 void logout() {
 	deleteCache();
-}
-
-void searchTasks() {
-
 }

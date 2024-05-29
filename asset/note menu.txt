@@ -1,7 +1,7 @@
-1. fitur update tugas 
-2. fitur delete tugas
-3. fitur finish tugas
-4. fitur searching nama task
+1. fitur update tugas pada lihat data
+2. fitur delete tugas pada menu utama -----
+3. fitur finish tugas pada lihat data , finis tugas sama aja dihapus biasa -----
+4. fitur searching nama task-----
 5. fitur profile 
 6. fitur lihat tugas ----
 
@@ -10,4 +10,10 @@
 7. ketika daftar , tidak bisa menambah task ------
 8. ketika username ada spasi ke skip  ------
 9. ketika melihat detail task malah program berhenti ------
-10. memperbaiki inputan dengan function yang sudah dibuat
+10. memperbaiki inputan dengan function yang sudah dibuat ----
+11. membuat error handling ketika user melihat data task ----
+12. membuat tanggal deadline dan jam ketika kosong disi tanggal hari ini dan jam 23:59
+13.membuat sorting dengan waktu paling mendekati deadline
+14. membuat nilai priority (opsional)
+15. membuat update task
+

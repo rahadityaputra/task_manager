@@ -1,3 +1,6 @@
+#pragma once
+#include <vector>
+#include <iostream>
 struct TASK {
 	std::string id;
 	std::string task_name;
@@ -7,4 +10,5 @@ struct TASK {
 	std::string user_id;
 };
 
-std::vector<TASK> taskData;
+extern std::vector<TASK> taskData;
+

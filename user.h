@@ -1,6 +1,8 @@
-#include <iostream>
-
 #pragma once
+
+#include <iostream>
+#include <vector>
+
 struct USER {
 	std::string id;
 	std::string username;
@@ -9,5 +11,5 @@ struct USER {
 	std::string created_at;
 };
 
-std::vector<USER> userData;
-USER curentUser;
+extern std::vector<USER> userData;
+extern USER curentUser;

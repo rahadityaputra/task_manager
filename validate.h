@@ -20,16 +20,31 @@ bool  checkLogin(std::string username, std::string password) {
   return false;	
 }
 
+// funtion untuk cek valid atau tidak name yang dimasukkan oleh user
+bool isValidName(const std::string& name) {
+    if (name.empty()) {
+			std::cout << "Name must be filled in !" << std::endl;
+        return false;
+    }
+    for (int i = 0; i < name.length(); i++) {
+        if (std::isdigit(name[i])) {
+            std::cout << "Name must not contain numbers !" << std::endl ;
+            return false;
+        }
+    }
+    return true;
+}
+
 // function untuk cek valid atau tidak username yang dimasukkan oleh user
 bool isValidUsername(const std::string& username) {
     if (username.empty()) {
-			std::cout << "Username harus diisi !" << std::endl;
+			std::cout << "Username must be filled in !" << std::endl;
         return false;
     }
     if( std::isalpha(username[0])) {
 			return true;
 		} else {
-			std::cout << "Username harus diawali huruf !" << std::endl; 
+			std::cout << "Username must begin with a letter !" << std::endl; 
 		}
 }
 
@@ -49,7 +64,7 @@ bool isValidPassword(const std::string& password) {
             return true;
         } 
     }
-		std::cout << "Password harus kombinasi karakter huruf dan angka" << std::endl;
+    std::cout << "Password must be a combination of letters and numbers." << std::endl;
     return hasLetter && hasDigit;
 }
 
@@ -59,34 +74,25 @@ bool validateData(std::string name, std::string username, std::string password1,
 	int usernameLength = username.length();
 	int password1Length = password1.length();
 	int password2Length = password2.length();
-	
-	if (nameLength >= MIN_NAME_LENGTH && nameLength <= MAX_NAME_LENGTH) {
-		if (usernameLength >= MIN_USERNAME_LENGTH && usernameLength <= MAX_USERNAME_LENGTH) {
-			if (isValidUsername(username)) {
-				if (password1Length >= MIN_PASSWORD_LENGTH && password1Length <= MAX_PASSWORD_LENGTH && password2Length >= MIN_PASSWORD_LENGTH && password2Length <= MAX_PASSWORD_LENGTH  ) {
-					if (password1 == password2) {
-						if(isValidPassword(password1)) {
-							return true;
-						}
-					} else {
-						std::cout << "password tidak sama" << std::endl;
-					}
-				} else {
-					std::cout << "password harus 8 - 16 karakter" << std::endl;
-				}		
-			}
-		} else {
-			std::cout << "Username harus 4 sampai 12 karakter" << std::endl;
-		}
-	
-	} else {
-		std::cout << "nama harus 1 - 100 karakter" <<std:: endl;
-	}
+	if (isValidName(name)) {
+        if (nameLength >= MIN_NAME_LENGTH && nameLength <= MAX_NAME_LENGTH) {
+            if (usernameLength >= MIN_USERNAME_LENGTH && usernameLength <= MAX_USERNAME_LENGTH) {
+                if (isValidUsername(username)) {
+                    if (password1Length >= MIN_PASSWORD_LENGTH && password1Length <= MAX_PASSWORD_LENGTH && password2Length >= MIN_PASSWORD_LENGTH && password2Length <= MAX_PASSWORD_LENGTH  ) {
+                        if (password1 == password2) {
+                            if(isValidPassword(password1)) {
+                                return true;
+                            }
+                        }
+                    }	
+                }
+            } 
+        }       
+    }
 	return false;
 }
 
 // funtion untuk mendapatkan input yang sesuai yang diminta oleh program
-
 
 template<typename T>
 T getValidatedInput(std::string prompt) {
@@ -110,6 +116,7 @@ T getValidatedInput(std::string prompt) {
 
 // Fungsi untuk mendapatkan input satu kata yang tervalidasi
 std::string getSingleWordInput(const std::string& prompt) {
+    std::cin.ignore();
     std::string input;
     while (true) {
         std::cout << prompt;
@@ -127,3 +134,4 @@ std::string getSingleWordInput(const std::string& prompt) {
         }
     }
 }
+
