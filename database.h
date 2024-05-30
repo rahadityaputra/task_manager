@@ -5,6 +5,8 @@
 #include <mysqld_error.h>
 #include "user.h"
 #include "task.h"
+#include <sstream>
+#include <algorithm>
 
 // Deklarasi variabel conn menggunakan extern
 extern MYSQL *conn;
@@ -16,6 +18,7 @@ extern char username[];
 extern char password[];
 extern char database[];
 extern int port;
+
 // Fungsi untuk menginisialisasi koneksi
 void getMysqlConnection();
 void getUserData(); 
@@ -25,5 +28,6 @@ bool addDataUser(std::string name, std::string username, std::string password);
 void displayTaskDetail(int number );
 void searchTasks(std::string searchWord, std::vector<TASK>& taskData);
 bool deleteTasksData(std::string id_task);
-
+tm stringToTime(const std::string& datetime);
+void sortTasks(std::vector<TASK>& taskData);
 #endif // DATABASE_H

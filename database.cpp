@@ -3,7 +3,7 @@
 #include <mysqld_error.h>
 #include "database.h"
 #include <iomanip>
-#include <algorithm>
+
 
 // Definisi variabel
 MYSQL *conn = nullptr;
@@ -112,10 +112,13 @@ bool addDataUser(std::string name, std::string username, std::string password) {
 	mysql_real_escape_string(conn, escaped_name, name.c_str(), name.length());
     sprintf(query, "INSERT INTO user VALUES (NULL, '%s', '%s', '%s', current_timestamp())", escaped_username, escaped_password, escaped_name);
     if (mysql_query(conn, query) == 0) {
-        std::cout << "Data berhasil ditambahkan!" << std::endl;
+        std::cout << "Sign In Successfully ...." << std::endl;
+				Sleep(2000);
         return true;
     } else {
-        std::cout << "Gagal menambahkan data! Error: " << mysql_error(conn) << std::endl;
+        // std::cout << "Gagal menambahkan data! Error: " << mysql_error(conn) << std::endl;
+				std::cout << "The username you have entered is already in use by another user. Please try a different username.." << std::endl;
+				Sleep(2000);
         return false;
     }
 }
@@ -153,3 +156,29 @@ void searchTasks(std::string searchWord, std::vector<TASK>& taskData) {
 	}
 }
 
+// Fungsi untuk mengubah string tanggal ke format struct tm
+tm stringToTime(const std::string& datetime) {
+    std::tm tm = {};
+    sscanf(datetime.c_str(), "%4d-%2d-%2d %2d:%2d:%2d", 
+           &tm.tm_year, &tm.tm_mon, &tm.tm_mday, 
+           &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
+    tm.tm_year -= 1900; // Tahun dihitung sejak 1900
+    tm.tm_mon -= 1;     // Bulan dari 0-11
+    return tm;
+
+}
+
+
+// Fungsi Bubble Sort untuk mengurutkan array tanggal
+void sortTasks(std::vector<TASK>& taskData) {
+	int n = taskData.size();
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < n - i - 1; ++j) {
+            std::tm tm1 = stringToTime(taskData[j].deadline);
+            std::tm tm2 = stringToTime(taskData[j + 1].deadline);
+            if (mktime(&tm1) > mktime(&tm2)) {
+                std::swap(taskData[j], taskData[j + 1]);
+            }
+        }
+    }
+}

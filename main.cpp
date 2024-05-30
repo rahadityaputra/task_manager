@@ -6,6 +6,7 @@
 #include <cctype>
 #include <chrono>
 #include <ctime>
+#include <limits>
 #include "validate.h"
 #include "database.h"
 #include "cache.h"
@@ -143,7 +144,8 @@ std::string capitalizeFIrstLetter(std::string name) {
 
 // funtion untuk input lebih dari 1 kata
 std::string getInputWithSpaces(const std::string& prompt) {
-	std::cin.ignore();
+	// std::cin.ignore();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::string input;
 	std::cout << prompt;
 	getline(std::cin, input);
@@ -194,16 +196,6 @@ void getCurrentDataUser(const std::string username, USER &curentUser, std::vecto
 	}
 }
 
-// function untuk menampilkan data user
-// function ini sepertinya tidak akan dipakai di dalam program
-// void displayData() {
-// 	for (int i = 0; i < userData.size(); i++) {
-//     std::cout << "id " << userData[i].id  << std::endl;
-//     std::cout << "username : " << userData[i].username << std::endl;
-//     std::cout << "password : " << userData[i].password << std::endl;
-//     std::cout << "create : "<< userData[i].created_at << std::endl;;
-//   }
-// }
 
 // function untuk menampilkan data task dalam bentuk tabel
 bool displayAllTasksData() {
@@ -252,6 +244,7 @@ bool displayAllTasksData() {
 
 // function untuk memuat semua data task dari database ke dalam program
 void seeAllTaskData() {
+	sortTasks(taskData);
 	int numberTask;
 	if (displayAllTasksData()) {
 			// untuk melihat task lebih detail
@@ -338,6 +331,7 @@ void logIn() {
 
 // funtion untuk sistem signin
 void signIn() {
+	system("cls");
 	std::string name;
 	std::string username;
 	std::string password1;
@@ -349,9 +343,7 @@ void signIn() {
   std::cout << "+-------------------------------------------+" << std::endl;
   std::cout << "|     Name must have 1 - 100 characters     |" << std::endl;
   std::cout << "+-------------------------------------------+" << std::endl;
-	std::cout << "Name         : ";
-	std::cin.ignore();
-	getline(std::cin, name);
+	name = getInputWithSpaces("Name         : ");
 	std::cout << "\n         ======= USERNAME =======" << std::endl;
 	std::cout << "+-------------------------------------------+" << std::endl;
 	std::cout << "|    Username must have 4 - 12 characters   |" << std::endl;
@@ -364,11 +356,7 @@ void signIn() {
 	std::cout << "|  Password must consist of a combination   |" << std::endl;
 	std::cout << "|           of leters and numbers           |" << std::endl;
 	std::cout << "+-------------------------------------------+" << std::endl;
-	// std::cout << "Password     : ";
-	// std::cin >> password1;
 	password1 = getSingleWordInput("Password     : ");
-	// std::cout << "Confirmation : ";
-	// std::cin >> password2;
 	password2 = getSingleWordInput("Confirmation : ");
 
 	if (validateData(name, username, password1, password2)) {
@@ -377,10 +365,11 @@ void signIn() {
 			createCache(username, password1);
 			getCurrentDataUser(username, curentUser, userData);
 			menu(username);
-		}
-	} else {
-		signIn();
+			return;
+		} 
 	}
+
+	signIn();
 }
 
 // function untuk log out / keluar dari program
