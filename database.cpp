@@ -1,8 +1,5 @@
-#include <iostream>
-#include <mysql.h>
-#include <mysqld_error.h>
 #include "database.h"
-#include <iomanip>
+
 
 
 // Definisi variabel
@@ -37,8 +34,7 @@ bool deleteTasksData(std::string id_task) {
 void getMysqlConnection() {
 	if((conn = mysql_init(NULL))) {
 		conn = mysql_real_connect(conn, host, username, password, database, port, NULL, 0);	
-	} else {
-		std::cout << "error" ;
+		std::cout << mysql_error(conn) << std::endl;
 	}
 }
 

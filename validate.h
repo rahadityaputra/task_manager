@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include "user.h"
 #include <windows.h>
@@ -134,4 +135,5 @@ std::string getSingleWordInput(const std::string& prompt) {
         }
     }
 }
+
 

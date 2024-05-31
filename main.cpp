@@ -7,6 +7,7 @@
 #include <chrono>
 #include <ctime>
 #include <limits>
+#include <iomanip>
 #include "validate.h"
 #include "database.h"
 #include "cache.h"
@@ -16,13 +17,14 @@
 
 void sayHello(std::string time);
 std::string getTimeOfDay();
+std::string getCurrentDate();
 std::string capitalizeFIrstLetter(std::string name);
 std::string getInputWithSpaces(const std::string& prompt);
 std::string convertToMySQLDatetime(const std::string& date, const std::string& time);
 void addTask(std::string user_id);
 void getCurrentDataUser(const std::string username, USER &curentUser, std::vector<USER> userData);
 void seeAllTaskData();
-void menu(std::string username);
+void menu();
 void menuOptios();
 void logIn();
 void signIn();
@@ -41,7 +43,7 @@ int main() {
 		if(checkCache()) {
 			std::string username = getUsernameDataInCacheFile();
 			getCurrentDataUser(username, curentUser, userData);
-			menu(username);
+			menu();
 		} else {
 			showLoginMenu();
 		}
@@ -50,6 +52,20 @@ int main() {
 	}
 
 	return 0;
+}
+
+std::string getCurrentDate() {
+    // Dapatkan waktu saat ini
+    std::time_t t = std::time(nullptr);
+    // Konversi ke struct tm
+    std::tm* now = std::localtime(&t);
+
+    // Gunakan stringstream untuk format output
+    std::ostringstream oss;
+    oss << std::put_time(now, "%Y-%m-%d");
+
+    // Kembalikan string hasil format
+    return oss.str();
 }
 
 // funtion untuk finish task
@@ -97,7 +113,7 @@ void showLoginMenu() {
 
 // function untuk memberikan ucapan kepada user sesuai waktu real time
 void sayHello(std::string time) {
-	std::cout << "Selamat " << time <<" "<<  curentUser.name << std::endl;
+	std::cout << "Good " << time <<" "<<  curentUser.name << std::endl;
 }
 
 // function untuk mendapatkan waktu real time 
@@ -107,15 +123,17 @@ std::string getTimeOfDay() {
     std::tm* localTime = std::localtime(&currentTime);
     int hour = localTime->tm_hour;
     if (hour >= 5 && hour < 12) {
-        return "Pagi";
+        return "Morning";
     } else if (hour >= 12 && hour < 15) {
-        return "Siang";
+        return "Afternoon";
     } else if (hour >= 15 && hour < 18) {
-        return "Sore";
+        return "Afternoon";
     } else {
-        return "Malam";
+        return "Evening";
     }
 }
+
+
 
 // funtion yang digunakan untuk mengubah huruf pertama pada kata menjadi huruf kapital
 std::string capitalizeFIrstLetter(std::string name) {
@@ -177,8 +195,18 @@ void addTask(std::string user_id) {
     std::string task_name = getInputWithSpaces("Masukkan task name: ");
     std::string description = getInputWithSpaces("Masukkan description: ");
     std::string date = getInputWithSpaces("Masukkan tanggal (DD-MM-YYYY): ");
+		if (date == 0) {
+			date = getCurrentDate();
+		}
     std::string time = getInputWithSpaces("Masukkan jam (HH:MM): ");
+		if (time == "") {
+			time = "23:59";
+		}
     std::string datetime = convertToMySQLDatetime(date, time);
+
+		if (datetime == "") {
+			datetime = 
+		}
     addTaskData(task_name, description, datetime, user_id);
 }
 
@@ -244,6 +272,8 @@ bool displayAllTasksData() {
 
 // function untuk memuat semua data task dari database ke dalam program
 void seeAllTaskData() {
+	system("cls");
+	getDataTaskByUsername(curentUser.username, taskData);
 	sortTasks(taskData);
 	int numberTask;
 	if (displayAllTasksData()) {
@@ -252,11 +282,12 @@ void seeAllTaskData() {
 		std::cin >> numberTask;
 		displayTaskDetail(numberTask);	
 		finishTask(numberTask);	
+		seeAllTaskData();
 	}
 }
 
 // funtion untuk menampilkan menu ke user
-void menu(std::string username) {
+void menu() {
 	std::string searchWord;
 	int choise;
 		system("cls");
@@ -267,7 +298,6 @@ void menu(std::string username) {
 		case  1: 
 			system("cls");
 			// menu menampilkan semua task
-			getDataTaskByUsername(username, taskData);
 			seeAllTaskData();
 			break;
 		case  2: 
@@ -296,7 +326,7 @@ void menu(std::string username) {
 			break;
 		}
 		system("pause");
-		menu(username);
+		menu();
 }
 
 void menuOptios() {
@@ -321,7 +351,7 @@ void logIn() {
 		Sleep(2000);
 		getCurrentDataUser(username, curentUser, userData);
 		createCache(username, password);
-		menu(username);
+		menu();
 	} else {
 		std::cout << "Login Failed....." << std::endl;
 		Sleep(2000);
@@ -364,7 +394,7 @@ void signIn() {
 			getUserData();
 			createCache(username, password1);
 			getCurrentDataUser(username, curentUser, userData);
-			menu(username);
+			menu();
 			return;
 		} 
 	}
