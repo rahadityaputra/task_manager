@@ -93,6 +93,7 @@ void 	menuOnTaskDetail(int numberTask) {
 	int choice;
 	std::cout << "1. Finish Task " << std::endl;
 	std::cout << "2. Update Task " << std::endl;
+	std::cout << "3. Back " << std::endl;
 	choice = getValidatedInput<int>("Choose : ");
 	switch (choice) {
 	case  1: 
@@ -104,7 +105,10 @@ void 	menuOnTaskDetail(int numberTask) {
 		std::cout << "1. Deadline " << std::endl;
 		choice = getValidatedInput<int>("Choose : ");
 		updateTask(choice, numberTask - 1, taskData);
-	break;
+		break;
+	case 3:
+		return;
+		break;
 	default :
 		break;
 	}
@@ -324,6 +328,9 @@ void seeAllTaskData() {
 		std::cin >> numberTask;
 		if (numberTask == 0) {
 			return;
+		}
+		if (numberTask < 1 || numberTask > taskData.size()) {
+			seeAllTaskData();
 		}
 		displayTaskDetail(numberTask);	
 		menuOnTaskDetail(numberTask);
