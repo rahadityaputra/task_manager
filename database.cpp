@@ -145,6 +145,7 @@ void displayTaskDetail(int number ) {
 
 // funtion untuk mencari task dengan title judul 
 void searchTasks(std::string searchWord, std::vector<TASK>& taskData) {
+	
 	for (int i = 0; i < taskData.size(); i++) {
 		if (taskData[i].task_name.find(searchWord) != std::string::npos) {
 			displayTaskDetail(i + 1);

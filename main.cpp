@@ -25,7 +25,7 @@ void addTask(std::string user_id);
 void getCurrentDataUser(const std::string username, USER &curentUser, std::vector<USER> userData);
 void seeAllTaskData();
 void menu();
-void menuOptios();
+void menuOptios(int &choise);
 void logIn();
 void signIn();
 void logout();
@@ -38,8 +38,8 @@ void finishTask(int numberTask);
 // funcion main
 int main() {
 	getMysqlConnection();
-	getUserData();
 	if (conn) {
+		getUserData();
 		if(checkCache()) {
 			std::string username = getUsernameDataInCacheFile();
 			getCurrentDataUser(username, curentUser, userData);
@@ -62,7 +62,7 @@ std::string getCurrentDate() {
 
     // Gunakan stringstream untuk format output
     std::ostringstream oss;
-    oss << std::put_time(now, "%Y-%m-%d");
+    oss << std::put_time(now, "%d-%m-%Y");
 
     // Kembalikan string hasil format
     return oss.str();
@@ -194,19 +194,16 @@ std::string convertToMySQLDatetime(const std::string& date, const std::string& t
 void addTask(std::string user_id) {
     std::string task_name = getInputWithSpaces("Masukkan task name: ");
     std::string description = getInputWithSpaces("Masukkan description: ");
-    std::string date = getInputWithSpaces("Masukkan tanggal (DD-MM-YYYY): ");
-		if (date == 0) {
+    std::string date = getSingleWordInput("Masukkan tanggal (DD-MM-YYYY): ");
+		if (date.length() == 0) {
 			date = getCurrentDate();
 		}
-    std::string time = getInputWithSpaces("Masukkan jam (HH:MM): ");
-		if (time == "") {
+    std::string time =  getSingleWordInput("Masukkan jam (HH:MM): ");
+		if (time.length() == 0) {
 			time = "23:59";
 		}
     std::string datetime = convertToMySQLDatetime(date, time);
-
-		if (datetime == "") {
-			datetime = 
-		}
+    std::cout << datetime ;
     addTaskData(task_name, description, datetime, user_id);
 }
 
@@ -280,6 +277,9 @@ void seeAllTaskData() {
 			// untuk melihat task lebih detail
 		std::cout << "See task number = ";
 		std::cin >> numberTask;
+		if (numberTask == 0) {
+			return;
+		}
 		displayTaskDetail(numberTask);	
 		finishTask(numberTask);	
 		seeAllTaskData();
@@ -288,12 +288,12 @@ void seeAllTaskData() {
 
 // funtion untuk menampilkan menu ke user
 void menu() {
+	getDataTaskByUsername(curentUser.username, taskData);
 	std::string searchWord;
 	int choise;
 		system("cls");
 		sayHello(getTimeOfDay());
-		menuOptios();
-		std::cin >> choise;
+		menuOptios(choise);
 		switch (choise) {
 		case  1: 
 			system("cls");
@@ -329,13 +329,14 @@ void menu() {
 		menu();
 }
 
-void menuOptios() {
+void menuOptios(int &choise) {
 	std::cout << "1. Display All Taks" << std::endl;
 	std::cout << "2. Add New Task" << std::endl;
 	std::cout << "3. Search Task" << std::endl;
 	std::cout << "4. Delete Task" << std::endl;
 	std::cout << "5. Logout" << std::endl;
-	std::cout << "Choose an option : ";
+	// std::cout << "Choose an option : ";
+	choise = getValidatedInput<int>("Choose an option : ");
 }
 
 // function untuk sistem login

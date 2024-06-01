@@ -1,19 +1,25 @@
 1. fitur update tugas pada lihat data
-2. fitur delete tugas pada menu utama -----
-3. fitur finish tugas pada lihat data , finis tugas sama aja dihapus biasa -----
-4. fitur searching nama task-----
 5. fitur profile 
-6. fitur lihat tugas ----
-
-
-6. ketika daftar , ucapan selamat tidak ada ------
-7. ketika daftar , tidak bisa menambah task ------
-8. ketika username ada spasi ke skip  ------
-9. ketika melihat detail task malah program berhenti ------
-10. memperbaiki inputan dengan function yang sudah dibuat ----
-11. membuat error handling ketika user melihat data task ----
-12. membuat tanggal deadline dan jam ketika kosong disi tanggal hari ini dan jam 23:59
-13.membuat sorting dengan waktu paling mendekati deadline
 14. membuat nilai priority (opsional)
-15. membuat update task
 
+// bug
+1. tidak bisa kembali ke menu saat melihat daftar task ++++
+2. tidak ada error ketika server mysql belum diaktifkan karena function getUserData +++++
+3. menu cari task tidak berjalan dengan baik karena data di array belum ada +++++ 
+4. error ketika ketik huruf saat memilih menu ++++++
+
+
+
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = main.o database.o user.o task.o
+LINKOBJ  = main.o database.o user.o task.o
+LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -L"C:/Program Files/MySQL/MySQL Server 8.0/lib" -lmysql
+INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files/MySQL/MySQL Server 8.0/include" -I"C:/Program Files/MySQL/MySQL Server 8.0/include/mysql"
+CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++" -I"C:/Program Files/MySQL/MySQL Server 8.0/include" -I"C:/Program Files/MySQL/MySQL Server 8.0/include/mysql"
+BIN      = task_manager.exe
+CXXFLAGS = $(CXXINCS) -std=c++11
+CFLAGS   = $(INCS) -std=c++11
+RM       = rm.exe -f

@@ -43,10 +43,11 @@ bool isValidUsername(const std::string& username) {
         return false;
     }
     if( std::isalpha(username[0])) {
-			return true;
-		} else {
-			std::cout << "Username must begin with a letter !" << std::endl; 
-		}
+		return true;
+	} else {
+		std::cout << "Username must begin with a letter !" << std::endl; 
+		return false;
+	}
 }
 
 // function untuk cek valid atau tidak password yang dimasukkan oleh user
