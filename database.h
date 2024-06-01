@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <iomanip>
 
+
 // Deklarasi variabel conn menggunakan extern
 extern MYSQL *conn;
 extern MYSQL_RES* result;
@@ -31,4 +32,5 @@ void searchTasks(std::string searchWord, std::vector<TASK>& taskData);
 bool deleteTasksData(std::string id_task);
 tm stringToTime(const std::string& datetime);
 void sortTasks(std::vector<TASK>& taskData);
+void updateTaskData(std::string editedValue, std::string attributeChoice, int index, std::vector<TASK>& taskData);
 #endif // DATABASE_H

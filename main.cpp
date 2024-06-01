@@ -34,6 +34,9 @@ void showLoginMenu();
 void deletaTasks();
 bool displayAllTasksData();
 void finishTask(int numberTask);
+void 	menuOnTaskDetail(int numberTask);
+void updateTask(int choice, int index, std::vector<TASK> taskData);
+
 
 // funcion main
 int main() {
@@ -54,6 +57,59 @@ int main() {
 	return 0;
 }
 
+void updateTask(int choice, int index, std::vector<TASK> taskData) {
+	std::string attributeChoice;
+	std::string editedValue;
+	std::string date, time;
+	switch (choice) {
+	case 1 : 
+		// update title task
+		attributeChoice = "task_name";
+		std::cout << "Title : "<< taskData[index].task_name << std::endl;
+		editedValue = getInputWithSpaces("Edit Title : ");	
+		break;
+	case 2 : 
+		// update description task
+		attributeChoice = "description";
+		std::cout << "Description : "<< taskData[index].description << std::endl;
+		editedValue = getInputWithSpaces("Edit Description : ");
+		break;
+	case 3 : 
+		// update deadline  task
+		attributeChoice = "deadline";
+		std::cout << "Deadline : "<< taskData[index].deadline << std::endl;
+		date = getSingleWordInput("Edit date : ");
+		time = getSingleWordInput("Edit time : ");
+		editedValue = convertToMySQLDatetime(date, time);
+		break;
+	default :
+		break;		
+	}
+
+	updateTaskData(editedValue, attributeChoice, index, taskData);
+}
+
+void 	menuOnTaskDetail(int numberTask) {
+	int choice;
+	std::cout << "1. Finish Task " << std::endl;
+	std::cout << "2. Update Task " << std::endl;
+	choice = getValidatedInput<int>("Choose : ");
+	switch (choice) {
+	case  1: 
+		finishTask(numberTask);			
+	break;
+	case  2: 
+		std::cout << "1. Title " << std::endl;
+		std::cout << "2. Description " << std::endl;
+		std::cout << "1. Deadline " << std::endl;
+		choice = getValidatedInput<int>("Choose : ");
+		updateTask(choice, numberTask - 1, taskData);
+	break;
+	default :
+		break;
+	}
+}
+
 std::string getCurrentDate() {
     // Dapatkan waktu saat ini
     std::time_t t = std::time(nullptr);
@@ -70,15 +126,7 @@ std::string getCurrentDate() {
 
 // funtion untuk finish task
 void finishTask(int  numberTask) {
-	std::string finish;
-	finish = getSingleWordInput( "Complete the task ? (y/n) : ");
-	if (finish == "y") {
 		deleteTasksData(taskData[numberTask - 1].id);
-	} else if(finish == "n") {
-		return;
-	} else {
-		finishTask(numberTask);
-	}
 }
 
 // funtion menu delete task
@@ -221,16 +269,13 @@ void getCurrentDataUser(const std::string username, USER &curentUser, std::vecto
 	}
 }
 
-
 // function untuk menampilkan data task dalam bentuk tabel
 bool displayAllTasksData() {
 	if (!taskData.size()) {
 		std::cout <<"Your task data is empty !" << std::endl;
 		return false;
 	}
-	
 	int numberTask;
-
 	const int numWidth = 5;
 	const int nameWidth = 30;
 	const int tableWidth = numWidth + nameWidth + 7; // Total lebar tabel termasuk border dan spasi
@@ -281,7 +326,7 @@ void seeAllTaskData() {
 			return;
 		}
 		displayTaskDetail(numberTask);	
-		finishTask(numberTask);	
+		menuOnTaskDetail(numberTask);
 		seeAllTaskData();
 	}
 }

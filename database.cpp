@@ -179,3 +179,25 @@ void sortTasks(std::vector<TASK>& taskData) {
         }
     }
 }
+
+void updateTaskData(std::string editedValue, std::string attributeChoice, int index, std::vector<TASK>& taskData) {
+	char query[500];
+  char escaped_editedValue[200];
+  char escaped_attributeChoice[200];
+	char escaped_task_id[100];
+
+	mysql_real_escape_string(conn, escaped_editedValue, editedValue.c_str(), editedValue.length());
+	mysql_real_escape_string(conn, escaped_attributeChoice, attributeChoice.c_str(), attributeChoice.length());
+	mysql_real_escape_string(conn, escaped_task_id,taskData[index].id.c_str(), taskData[index].id.length());
+	sprintf(query, "UPDATE task SET %s = '%s' WHERE task_id = %s", escaped_attributeChoice, escaped_editedValue, escaped_task_id);
+	if (mysql_query(conn, query) == 0) {
+			std::cout << "Update Successfully ...." << std::endl;
+			Sleep(2000);
+			// return true;
+	} else {
+			std::cout << "Update Failed ...." << mysql_error(conn) << std::endl;
+			Sleep(2000);
+			// return false;
+	}
+	
+}
