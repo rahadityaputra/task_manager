@@ -66,20 +66,20 @@ void updateTask(int choice, int index, std::vector<TASK> taskData) {
 		// update title task
 		attributeChoice = "task_name";
 		std::cout << "Title : "<< taskData[index].task_name << std::endl;
-		editedValue = getInputWithSpaces("Edit Title : ");	
+		editedValue = getInputWithSpaces("Edit title task  : ");	
 		break;
 	case 2 : 
 		// update description task
 		attributeChoice = "description";
 		std::cout << "Description : "<< taskData[index].description << std::endl;
-		editedValue = getInputWithSpaces("Edit Description : ");
+		editedValue = getInputWithSpaces("Edit description task : ");
 		break;
 	case 3 : 
 		// update deadline  task
 		attributeChoice = "deadline";
 		std::cout << "Deadline : "<< taskData[index].deadline << std::endl;
-		date = getSingleWordInput("Edit date : ");
-		time = getSingleWordInput("Edit time : ");
+		date = getSingleWordInput("Edit deadline date (DD-MM-YYYY): ");
+		time = getSingleWordInput("Edit deadline time (HH:MM) : ");
 		editedValue = convertToMySQLDatetime(date, time);
 		break;
 	default :
@@ -102,7 +102,7 @@ void 	menuOnTaskDetail(int numberTask) {
 	case  2: 
 		std::cout << "1. Title " << std::endl;
 		std::cout << "2. Description " << std::endl;
-		std::cout << "1. Deadline " << std::endl;
+		std::cout << "3. Deadline " << std::endl;
 		choice = getValidatedInput<int>("Choose : ");
 		updateTask(choice, numberTask - 1, taskData);
 		break;
@@ -244,13 +244,13 @@ std::string convertToMySQLDatetime(const std::string& date, const std::string& t
 
 // function untuk menambah tugas yang dimana tugas tersebut akan di simpan ke database
 void addTask(std::string user_id) {
-    std::string task_name = getInputWithSpaces("Masukkan task name: ");
-    std::string description = getInputWithSpaces("Masukkan description: ");
-    std::string date = getSingleWordInput("Masukkan tanggal (DD-MM-YYYY): ");
+    std::string task_name = getInputWithSpaces("Enter task title : ");
+    std::string description = getInputWithSpaces( "Enter task description : ");
+    std::string date = getSingleWordInput("Enter deadline date (DD-MM-YYYY): ");
 		if (date.length() == 0) {
 			date = getCurrentDate();
 		}
-    std::string time =  getSingleWordInput("Masukkan jam (HH:MM): ");
+    std::string time =  getSingleWordInput("Enter deadline time (HH:MM): ");
 		if (time.length() == 0) {
 			time = "23:59";
 		}
