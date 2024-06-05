@@ -419,7 +419,7 @@ void signUp() {
 	std::string password1;
 	std::string password2;
 	std::cout << "+-------------------------------------------+" << std::endl;
-	std::cout << "|           ======= Sign In =======         |" << std::endl;
+	std::cout << "|           ======= Sign Up =======         |" << std::endl;
   std::cout << "+-------------------------------------------+" << std::endl;
 	std::cout << "\n           ======= NAME =======" << std::endl;
   std::cout << "+-------------------------------------------+" << std::endl;
