@@ -27,7 +27,7 @@ void seeAllTaskData();
 void menu();
 void menuOptios(int &choise);
 void logIn();
-void signIn();
+void signUp();
 void logout();
 void getValidatedInput(std::string &variabel, std::string prompt);
 void showLoginMenu();
@@ -142,19 +142,19 @@ void deleteTasks () {
 	}
 }
 
-// funtion untuk menampilkan menu login dan sign in
+// funtion untuk menampilkan menu login dan sign up
 void showLoginMenu() {
 	system("cls");
 	int choise;
 	std::cout << "Welcome to Task Manager" << std::endl;
-			std::cout << "1. Log in\n2. Sign in" << std::endl;
+			std::cout << "1. Log in\n2. Sign Up" << std::endl;
 			choise = getValidatedInput<int>("Choose an option : ");
 			switch(choise) {
 				case 1:
 					logIn();
 					break;
 				case 2:
-					signIn();
+					signUp();
 					break;
 				default:
 					showLoginMenu();
@@ -411,8 +411,8 @@ void logIn() {
 	}
 }
 
-// funtion untuk sistem signin
-void signIn() {
+// funtion untuk sistem signUp
+void signUp() {
 	system("cls");
 	std::string name;
 	std::string username;
@@ -451,7 +451,7 @@ void signIn() {
 		} 
 	}
 
-	signIn();
+	signUp();
 }
 
 // function untuk log out / keluar dari program
