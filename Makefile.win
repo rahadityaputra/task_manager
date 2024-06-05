@@ -10,8 +10,8 @@ LIBS     = -L"C:/MinGW/lib" -L"C:/MinGW/x86_64-w64-mingw32/lib" -static-libstdc+
 INCS     = -I"C:/MinGW/include" -I"C:/MinGW/x86_64-w64-mingw32/include" -I"C:/MinGW/lib/gcc/x86_64-w64-mingw32/11.2.0/include" -I"C:/Program Files/MySQL/MySQL Server 8.0/include" -I"C:/Program Files/MySQL/MySQL Server 8.0/include/mysql"
 CXXINCS  = -I"C:/MinGW/include" -I"C:/MinGW/x86_64-w64-mingw32/include" -I"C:/MinGW/lib/gcc/x86_64-w64-mingw32/11.2.0/include" -I"C:/MinGW/include/c++/11.2.0" -I"C:/Program Files/MySQL/MySQL Server 8.0/include" -I"C:/Program Files/MySQL/MySQL Server 8.0/include/mysql"
 BIN      = task_manager.exe
-CXXFLAGS = $(CXXINCS) -std=c++11
-CFLAGS   = $(INCS) -std=c++11
+CXXFLAGS = $(CXXINCS) -std=gnu++11 -std=c++11
+CFLAGS   = $(INCS) -std=gnu++11 -std=c++11
 RM       = rm.exe -f
 
 .PHONY: all all-before all-after clean clean-custom

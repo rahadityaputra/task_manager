@@ -255,7 +255,6 @@ void addTask(std::string user_id) {
 			time = "23:59";
 		}
     std::string datetime = convertToMySQLDatetime(date, time);
-    std::cout << datetime ;
     addTaskData(task_name, description, datetime, user_id);
 }
 
